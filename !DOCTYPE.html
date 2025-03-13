@@ -3,278 +3,225 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mission 2: Materials Testing Lab</title>
+    <title>Mission 3: Fuel Injection & Quantum Mechanics</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
             color: white;
+            animation: backgroundAnimation 10s infinite alternate;
+        }
+        @keyframes backgroundAnimation {
+            0% {
+                background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            }
+            100% {
+                background: linear-gradient(135deg, #16213e, #0f3460, #1a1a2e);
+            }
         }
         h1 {
+            margin-top: 20px;
             font-size: 2.5rem;
-            margin: 20px 0;
             color: #00ffcc;
-            text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
         }
-        .test-container {
+        .simulation-container, .mission-complete {
             display: none;
             margin-top: 20px;
         }
-        .material {
-            background-color: #00aaff;
-            padding: 15px;
-            margin: 10px;
-            cursor: pointer;
+        .comparison-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px auto;
+            width: 90%;
+        }
+        .fuel-type {
+            width: 45%;
+            border: 1px solid #444;
+            padding: 20px;
             border-radius: 10px;
-            display: inline-block;
-            width: 150px;
-            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
-            font-size: 1.2rem;
+            background-color: rgba(30, 30, 30, 0.8);
         }
-        .material:hover {
-            transform: scale(1.1);
-            background-color: #0088cc;
-            box-shadow: 0 0 15px #00aaff;
+        .slider-container {
+            margin: 20px auto;
+            width: 100%;
+            text-align: left;
         }
-        .material.selected {
-            border: 2px solid #00ff00;
-            box-shadow: 0 0 20px #00ff00;
+        input[type="range"] {
+            width: 100%;
+            background: #00ffcc;
+            border-radius: 5px;
         }
-        .test-result {
+        .result {
             margin-top: 20px;
-            font-size: 1.2rem;
+            font-size: 18px;
             font-weight: bold;
             color: #00ffcc;
         }
+        .tooltip {
+            font-size: 14px;
+            color: #aaa;
+            cursor: help;
+        }
         .mission-complete {
-            display: none;
-            margin-top: 20px;
-            font-size: 1.5rem;
+            font-size: 22px;
             color: #00ff00;
-            text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
         }
-        .info-box {
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px auto;
-            width: 90%;
-            max-width: 600px;
-            font-size: 1.1rem;
-            box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
-        }
-        .chassis-info {
-            display: none;
+        .restart-button {
             margin-top: 20px;
-            font-size: 1.1rem;
-            color: #00ffcc;
-        }
-        button {
-            background-color: #00aaff;
-            color: white;
-            padding: 10px 15px;
-            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
             cursor: pointer;
+            background-color: #00ffcc;
+            border: none;
+            border-radius: 5px;
+            color: #16213e;
+        }
+        .explanation {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #00ffcc;
+            text-align: left;
+            padding: 10px;
+            border: 1px solid #444;
             border-radius: 10px;
-            margin: 5px auto;
-            width: 80%;
-            max-width: 300px;
-            font-size: 1.1rem;
-            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+            background-color: rgba(30, 30, 30, 0.8);
         }
-        button:hover {
-            transform: scale(1.1);
-            background-color: #0088cc;
-            box-shadow: 0 0 15px #00aaff;
-        }
-        .stars {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: transparent;
-        }
-        .star {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle 2s infinite;
-        }
-        @keyframes twinkle {
-            0%, 100% { opacity: 0; }
-            50% { opacity: 1; }
+        .compare-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #00ffcc;
+            border: none;
+            border-radius: 5px;
+            color: #16213e;
         }
     </style>
 </head>
 <body>
-    <div class="stars">
-        <!-- Stars for background animation -->
-        <div class="star" style="top: 10%; left: 20%; animation-delay: 0s;"></div>
-        <div class="star" style="top: 30%; left: 50%; animation-delay: 1s;"></div>
-        <div class="star" style="top: 70%; left: 80%; animation-delay: 0.5s;"></div>
-        <div class="star" style="top: 50%; left: 10%; animation-delay: 1.5s;"></div>
-        <div class="star" style="top: 90%; left: 40%; animation-delay: 0.8s;"></div>
-    </div>
-
-    <h1>🚀 Mission 2: Materials Testing Lab 🔬</h1>
+    <h1>Mission 3: Fuel Injection & Quantum Mechanics</h1>
     <button onclick="startSimulation()">Start Mission</button>
 
-    <div class="test-container" id="testContainer">
-        <h2>Select a Material to Test</h2>
-        
-        <div class="material" onclick="runTest('aluminium')">⚙️ Aluminium</div>
-        <div class="material" onclick="runTest('alloy')">🔧 Alloy</div>
-        <div class="material" onclick="runTest('polymer')">🔹 Polymer</div>
+    <div class="simulation-container" id="simulationContainer">
+        <h2>Compare Fuel Types: RON 95 vs RON 97</h2>
 
-        <h2>Select a Test</h2>
-        <button onclick="selectTest('heat')">🔥 Heat Resistance</button>
-        <button onclick="selectTest('strength')">💪 Strength Test</button>
-        <button onclick="selectTest('flexibility')">🔄 Flexibility Test</button>
+        <div class="comparison-container">
+            <!-- RON 95 Section -->
+            <div class="fuel-type" id="ron95">
+                <h3>RON 95</h3>
+                <div class="slider-container">
+                    <label for="atomization95">Fuel Atomization Level: <span id="atomization95Value">50</span>%</label>
+                    <input type="range" id="atomization95" min="0" max="100" value="50" oninput="updateValue('atomization95')">
+                </div>
 
-        <div class="info-box" id="infoBox">
-            <!-- Test descriptions will be displayed here -->
+                <div class="slider-container">
+                    <label for="catalyst95">Catalyst Efficiency (% Reaction Speed): <span id="catalyst95Value">50</span>%</label>
+                    <input type="range" id="catalyst95" min="0" max="100" value="50" oninput="updateValue('catalyst95')">
+                </div>
+
+                <p class="result" id="result95">Efficiency Score: --%</p>
+            </div>
+
+            <!-- RON 97 Section -->
+            <div class="fuel-type" id="ron97">
+                <h3>RON 97</h3>
+                <div class="slider-container">
+                    <label for="atomization97">Fuel Atomization Level: <span id="atomization97Value">50</span>%</label>
+                    <input type="range" id="atomization97" min="0" max="100" value="50" oninput="updateValue('atomization97')">
+                </div>
+
+                <div class="slider-container">
+                    <label for="catalyst97">Catalyst Efficiency (% Reaction Speed): <span id="catalyst97Value">50</span>%</label>
+                    <input type="range" id="catalyst97" min="0" max="100" value="50" oninput="updateValue('catalyst97')">
+                </div>
+
+                <p class="result" id="result97">Efficiency Score: --%</p>
+            </div>
         </div>
 
-        <button onclick="revealChassis()" id="chassisButton">Unlock the Mystery of the Chassis 🕵️‍♂️</button>
-        <div class="chassis-info" id="chassisInfo">
-            <h3>🔍 The Mystery of the Chassis</h3>
-            <p>
-                The chassis is the <strong>backbone</strong> of a car, providing structural support and ensuring safety, durability, and performance.<br><br>
-                - In <strong>Proton X50</strong> and <strong>Proton X70</strong>, the chassis is designed using advanced materials like <strong>high-strength steel</strong> and <strong>aluminium alloys</strong>.<br>
-                - These materials are chosen for their <strong>strength</strong>, <strong>lightweight properties</strong>, and <strong>corrosion resistance</strong>.<br>
-                - The chassis ensures the car can handle forces like acceleration, braking, and cornering while protecting passengers during collisions.<br><br>
-                <strong>Molecular Structure:</strong><br>
-                - Steel: Body-Centered Cubic (BCC) for strength.<br>
-                - Aluminium: Face-Centered Cubic (FCC) for lightweight and corrosion resistance.<br><br>
-                <strong>Fun Fact:</strong> The chassis is like the skeleton of the car, holding everything together and making it strong yet flexible!
-            </p>
-        </div>
+        <button onclick="compareFuels()" class="compare-button">Compare Fuel Efficiency</button>
+
+        <div class="explanation" id="explanationText"></div>
+
+        <button onclick="restartMission()" class="restart-button" id="restartButton" style="display: none;">Restart Mission</button>
     </div>
 
     <div class="mission-complete" id="missionComplete">
-        ✅ <strong>Mission Accomplished!</strong> You have successfully tested Proton car materials! 🚗
+        ✅ <strong>Mission Accomplished!</strong> You have optimized Proton's fuel efficiency! 🚗
     </div>
 
-    <button onclick="restartMission()" id="restartButton" style="display: none;">Restart Mission</button>
-
     <script>
-        let selectedMaterial = "";
+        // Ensure the DOM is fully loaded before running the script
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("DOM fully loaded and parsed");
+        });
 
         function startSimulation() {
-            document.getElementById("testContainer").style.display = "block";
+            console.log("Start Mission button clicked");
+            document.getElementById("simulationContainer").style.display = "block";
             document.getElementById("missionComplete").style.display = "none";
-            document.getElementById("infoBox").innerText = "";
+            document.getElementById("result95").innerText = "Efficiency Score: --%";
+            document.getElementById("result97").innerText = "Efficiency Score: --%";
+            document.getElementById("explanationText").innerText = "";
             document.getElementById("restartButton").style.display = "none";
-            document.getElementById("chassisInfo").style.display = "none";
-            resetSelections();
         }
 
-        function runTest(material) {
-            selectedMaterial = material;
-            document.querySelectorAll(".material").forEach(m => m.classList.remove("selected"));
-            document.querySelector(`.material[onclick*='${material}']`).classList.add("selected");
-            document.getElementById("infoBox").innerText = `Selected Material: ${material.toUpperCase()}`;
+        function updateValue(param) {
+            console.log(`Updating value for ${param}`);
+            document.getElementById(param + "Value").innerText = document.getElementById(param).value;
         }
 
-        function selectTest(test) {
-            if (!selectedMaterial) {
-                document.getElementById("infoBox").innerText = "⚠️ Select a material first!";
-                return;
-            }
-
-            let description = "";
-            if (selectedMaterial === "aluminium") {
-                if (test === "heat") {
-                    description = `
-                        🔥 Aluminium has excellent heat resistance!<br>
-                        - Used in Proton X50 and X70 body panels and wheels.<br>
-                        - Molecular Structure: Face-Centered Cubic (FCC).<br>
-                        - Properties: Lightweight, corrosion-resistant, and good thermal conductivity.
-                    `;
-                } else if (test === "strength") {
-                    description = `
-                        💪 Aluminium is lightweight but less strong than steel.<br>
-                        - Used in Proton X50 and X70 chassis for weight reduction.<br>
-                        - Molecular Structure: Face-Centered Cubic (FCC).<br>
-                        - Properties: High strength-to-weight ratio, ideal for fuel efficiency.
-                    `;
-                } else if (test === "flexibility") {
-                    description = `
-                        🔄 Aluminium is more flexible than steel.<br>
-                        - Used in Proton X50 and X70 body panels for sleek designs.<br>
-                        - Molecular Structure: Face-Centered Cubic (FCC).<br>
-                        - Properties: Allows for better aerodynamics and impact absorption.
-                    `;
-                }
-            } else if (selectedMaterial === "alloy") {
-                if (test === "heat") {
-                    description = `
-                        🔥 Alloys have varying heat resistance depending on their composition.<br>
-                        - Used in Proton X50 and X70 engine components and chassis.<br>
-                        - Molecular Structure: Tailored for specific properties.<br>
-                        - Properties: High-temperature performance and durability.
-                    `;
-                } else if (test === "strength") {
-                    description = `
-                        💪 Alloys are stronger than pure metals.<br>
-                        - Used in Proton X50 and X70 chassis for structural integrity.<br>
-                        - Molecular Structure: Tailored for strength and weight reduction.<br>
-                        - Properties: Balances strength, weight, and cost.
-                    `;
-                } else if (test === "flexibility") {
-                    description = `
-                        🔄 Alloys can be designed for flexibility or rigidity.<br>
-                        - Used in Proton X50 and X70 suspension systems.<br>
-                        - Molecular Structure: Tailored for specific applications.<br>
-                        - Properties: Enhances handling and ride comfort.
-                    `;
-                }
-            } else if (selectedMaterial === "polymer") {
-                if (test === "heat") {
-                    description = `
-                        🔥 Polymers have low heat resistance and can melt at high temperatures.<br>
-                        - Used in Proton X50 and X70 bumpers and interior trim.<br>
-                        - Molecular Structure: Long chains of carbon atoms.<br>
-                        - Properties: Lightweight and impact-resistant.
-                    `;
-                } else if (test === "strength") {
-                    description = `
-                        💪 Polymers are not very strong but are lightweight.<br>
-                        - Used in Proton X50 and X70 bumpers for impact absorption.<br>
-                        - Molecular Structure: Long chains of carbon atoms.<br>
-                        - Properties: Absorbs energy during collisions.
-                    `;
-                } else if (test === "flexibility") {
-                    description = `
-                        🔄 Polymers are super flexible!<br>
-                        - Used in Proton X50 and X70 interior trim and bumpers.<br>
-                        - Molecular Structure: Long chains of carbon atoms.<br>
-                        - Properties: Provides aesthetic appeal and safety.
-                    `;
-                }
-            }
-
-            document.getElementById("infoBox").innerHTML = description;
+        function calculateEfficiency(atomization, catalyst, energyOffset) {
+            return Math.round((atomization * 0.4) + (catalyst * 0.6) + energyOffset);
         }
 
-        function revealChassis() {
-            document.getElementById("chassisInfo").style.display = "block";
-        }
+        function compareFuels() {
+            console.log("Compare Fuels button clicked");
 
-        function resetSelections() {
-            selectedMaterial = "";
-            document.querySelectorAll(".material").forEach(m => m.classList.remove("selected"));
-            document.querySelectorAll("button").forEach(btn => btn.classList.remove("selected"));
+            // RON 95 Parameters
+            let atomization95 = parseInt(document.getElementById("atomization95").value);
+            let catalyst95 = parseInt(document.getElementById("catalyst95").value);
+            let efficiency95 = calculateEfficiency(atomization95, catalyst95, 25); // RON 95 has lower energy offset
+
+            // RON 97 Parameters
+            let atomization97 = parseInt(document.getElementById("atomization97").value);
+            let catalyst97 = parseInt(document.getElementById("catalyst97").value);
+            let efficiency97 = calculateEfficiency(atomization97, catalyst97, 50); // RON 97 has higher energy offset
+
+            // Display Results
+            document.getElementById("result95").innerText = `Efficiency Score: ${efficiency95}%`;
+            document.getElementById("result97").innerText = `Efficiency Score: ${efficiency97}%`;
+
+            // Dynamic Explanation
+            let explanation = `
+                <strong>Comparison Results:</strong><br>
+                - <strong>RON 95 Efficiency:</strong> ${efficiency95}%<br>
+                - <strong>RON 97 Efficiency:</strong> ${efficiency97}%<br><br>
+                <strong>Parameter Analysis:</strong><br>
+                - <strong>Fuel Atomization:</strong><br>
+                  &nbsp;&nbsp;• RON 95: ${atomization95}% atomization ensures ${atomization95 >= 70 ? "excellent" : "moderate"} fuel droplet size.<br>
+                  &nbsp;&nbsp;• RON 97: ${atomization97}% atomization ensures ${atomization97 >= 70 ? "excellent" : "moderate"} fuel droplet size.<br>
+                - <strong>Catalyst Efficiency:</strong><br>
+                  &nbsp;&nbsp;• RON 95: ${catalyst95}% catalyst efficiency ${catalyst95 >= 80 ? "significantly speeds up" : "moderately speeds up"} the combustion reaction.<br>
+                  &nbsp;&nbsp;• RON 97: ${catalyst97}% catalyst efficiency ${catalyst97 >= 80 ? "significantly speeds up" : "moderately speeds up"} the combustion reaction.<br>
+                - <strong>Octane Rating:</strong><br>
+                  &nbsp;&nbsp;• RON 95 has a lower octane rating (95), which makes it more prone to knocking and less efficient combustion.<br>
+                  &nbsp;&nbsp;• RON 97 has a higher octane rating (97), allowing for smoother combustion and better fuel efficiency.<br><br>
+                <strong>Proton Cars:</strong><br>
+                - High-performance engines (e.g., Proton X50 and X70) are designed to take advantage of higher octane fuels like RON 97.<br>
+                - Using RON 97 improves fuel efficiency, reduces emissions, and enhances engine performance.<br>
+                - While RON 95 can still be used, RON 97 provides better overall performance and efficiency.
+            `;
+
+            document.getElementById("explanationText").innerHTML = explanation;
+            document.getElementById("restartButton").style.display = "block";
         }
 
         function restartMission() {
+            console.log("Restart Mission button clicked");
             startSimulation();
         }
     </script>
